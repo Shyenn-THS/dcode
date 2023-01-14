@@ -60,11 +60,12 @@ const Room = (props: Props) => {
   useEffect(() => {
     if (typeof navigator !== 'undefined') {
       const Peer = require('peerjs').default;
-      const peer = new Peer(username, {
-        host: 'localhost',
-        port: 9000,
-        path: '/myapp',
-      });
+      // const peer = new Peer(username, {
+      //   host: 'localhost',
+      //   port: 9000,
+      //   path: '/myapp',
+      // });
+      const peer = new Peer(username);
       setMe(peer);
     }
   }, [username, setMe]);

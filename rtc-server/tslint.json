@@ -12,6 +12,17 @@
                 "timeEnd",
                 "trace"
             ]
+        },
+        "no-shadowed-variable": {
+            "severity": "warning",
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
         }
     },
     "jsRules": {}
