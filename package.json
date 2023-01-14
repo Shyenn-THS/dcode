@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@routerprotocol/router-js-sdk": "^0.1.6",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@types/js-cookie": "^3.0.2",
     "@types/react-countup": "^4.3.1",
