@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserDetails, SessionDetails, ModalContent } from '../../typings';
-import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import db from '../../lib/firebase';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
@@ -24,12 +30,11 @@ type Props = {
 };
 
 const SessionPage = (props: Props) => {
-  const { data, userData } = props;
+  const { data, userData, startDateTime } = props;
   const { data: session } = useSession();
   const { dispatch } = useContext(UIContext);
   const router = useRouter();
   const sessionId: string = router.query.id as string;
-  const [sessionDateTime, setSessionDateTime] = useState<Date>();
 
   const {
     title,
@@ -96,19 +101,17 @@ const SessionPage = (props: Props) => {
     possitive: true,
   };
 
-  useEffect(() => {
-    if (startDate) {
-      const splitTime = startTime.split(':');
-      const hours = splitTime[0];
-      const mins = splitTime[1];
-      const temp = new Date(startDate);
-      temp.setHours(parseInt(hours));
-      temp.setMinutes(parseInt(mins));
-      temp.setSeconds(0);
-      temp.setMilliseconds(0);
-      setSessionDateTime(temp);
+  const handleJoin = async () => {
+    try {
+      const userRef = doc(db, 'sessions', sessionId);
+      await updateDoc(userRef, {
+        attendees: arrayUnion(session?.user.username),
+      });
+    } catch (error: any) {
+      console.error(error);
     }
-  }, [startDate, startTime]);
+    router.push(`/room/${sessionId}`);
+  };
 
   return (
     <main className="grid relative py-20 grid-cols-10 dark:bg-gray-1000 dark:text-gray-100">
@@ -233,7 +236,7 @@ const SessionPage = (props: Props) => {
                     ? 'Ended:'
                     : 'Delayed by:'}
                 </span>
-                <span>{moment(sessionDateTime, 'YYYYMMDD').fromNow()}</span>
+                <span>{moment(startDateTime, 'YYYYMMDD').fromNow()}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-semibold text-gray-200">
@@ -280,7 +283,10 @@ const SessionPage = (props: Props) => {
                     <span>Notify Me</span> <BsFillBellFill />
                   </button>
                 ) : (
-                  <button className="btn bg-green-1000 space-x-2 w-full">
+                  <button
+                    onClick={handleJoin}
+                    className="btn bg-green-1000 space-x-2 w-full"
+                  >
                     <span>Join Session</span> <RiShareForward2Line />
                   </button>
                 )}
@@ -302,11 +308,26 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const sessionSnap = await getDoc(sessionRef);
     const data = sessionSnap.data() as SessionDetails;
 
+    const splitTime = data.startTime.split(':');
+    const hours = splitTime[0];
+    const mins = splitTime[1];
+    const temp = new Date(data.startDate);
+    temp.setHours(parseInt(hours));
+    temp.setMinutes(parseInt(mins));
+    temp.setSeconds(0);
+    temp.setMilliseconds(0);
+
+    // if (new Date() > temp && data.status === 'upcoming') {
+    //   await updateDoc(sessionRef, {
+    //     status: 'delayed',
+    //   });
+    // }
+
     const userRef = doc(db, 'users', data.speaker);
     const userSnap = await getDoc(userRef);
     const userData = userSnap.data() as UserDetails;
     // Pass data to the page via props
-    return { props: { data, userData } };
+    return { props: { data, userData, startDateTime: temp.toISOString() } };
   } catch (error: any) {
     console.error(error.message);
     return { props: { ...error } };

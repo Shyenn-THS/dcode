@@ -5,9 +5,23 @@ interface IRoomParams {
   peerId: string;
 }
 
+interface UserDetails {
+  fname: string;
+  lname: string;
+  email: string;
+  image: string;
+  profession: string;
+  bio: string;
+  username: string;
+  website: string;
+  instagram: string;
+  linkedin: string;
+  twitter: string;
+}
+
 interface IMessage {
   content: string;
-  author?: string;
+  author?: UserDetails;
   timestamp: number;
 }
 

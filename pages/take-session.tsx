@@ -103,7 +103,7 @@ const CreateCourse = (props: Props) => {
         <div className="container mx-auto flex flex-col items-center px-4 py-16 text-center md:py-32 md:px-10 lg:px-32 xl:max-w-3xl">
           <h1 className="text-4xl font-bold leading-none sm:text-5xl">
             Educate others with your{' '}
-            <span className="dark:text-blue-800">Knowledge</span>
+            <span className="text-blue-800">Knowledge</span>
           </h1>
           <p className="px-8 mt-8 mb-12 text-lg">
             Take a live session and educate others from what you are best in.
@@ -161,7 +161,7 @@ const CreateCourse = (props: Props) => {
                 </label>
                 <textarea
                   id="bio"
-                  placeholder="Write something cool about you...."
+                  placeholder="Write something about session...."
                   className="w-full rounded-md  dark:text-gray-900 px-4 py-2"
                   {...register('description')}
                 ></textarea>

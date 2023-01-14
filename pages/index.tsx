@@ -60,14 +60,6 @@ const Home: NextPage = () => {
               src="/assets/5.png"
             />
           </div>
-          <div className="relative">
-            <Image
-              height={1080}
-              width={1920}
-              alt="Carousel 6"
-              src="/assets/6.png"
-            />
-          </div>
         </Carousel>
       </main>
     </div>

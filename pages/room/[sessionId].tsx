@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserDetails, SessionDetails, ModalContent } from '../../typings';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import db from '../../lib/firebase';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ import Page404 from '../../components/404';
 import VideoPlayer from '../../components/VideoPalyer';
 import { RoomContext } from '../../contexts/RoomContext';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import {
   BsCameraVideoFill,
   BsCameraVideoOffFill,
@@ -21,7 +22,7 @@ import {
   BsFillMicMuteFill,
 } from 'react-icons/bs';
 import { UIContext } from '../../contexts/UIContext';
-import { Chat } from '../../components/chat/Chat';
+import Chat from '../../components/Chat';
 
 type Props = {
   data: SessionDetails;
@@ -114,16 +115,34 @@ const Room = (props: Props) => {
       });
   };
 
-  const stopStreaming = () => {
+  const stopStreaming = async () => {
     setStartedSession(false);
     stream.getTracks().forEach((track: MediaStreamTrack) => {
       track.stop();
+    });
+
+    const sessionRef = doc(db, 'sessions', router.query.sessionId!);
+    await updateDoc(sessionRef, {
+      status: 'ended',
     });
 
     const roomId = router.query.sessionId;
     ws.emit('session-ended', { roomId });
     setStream(null);
   };
+
+  useEffect(() => {
+    ws.on('session-ended', () => {
+      toast('Session Ended Sucessfully! Redirecting to homepage in 5Sec.');
+      setTimeout(() => {
+        router.push('/session');
+      }, 5000);
+    });
+
+    return () => {
+      ws.off('session-ended');
+    };
+  }, [ws, router]);
 
   const switchStream = () => {
     setScreenShare(!screenShare);
@@ -239,11 +258,23 @@ const Room = (props: Props) => {
             </button>
           </div>
         ) : (
-          <div className="p-4 rounded-xl space-x-4 bg-gray-900 flex justify-center items-center w-full"></div>
+          <div className="p-4 rounded-xl space-x-4 bg-gray-900 flex justify-between items-center w-full">
+            <h1 className="text-xl font-semibold text-gray-100">{title}</h1>
+            <div
+              onClick={() => {
+                router.push('/sessions');
+              }}
+              className="btn btn-error"
+            >
+              Leave Session
+            </div>
+          </div>
         )}
       </section>
-      <aside className="h-full w-full col-span-3 px-4 py-10">
-        <div className="bg-gray-900 rounded-xl w-full h-full"></div>
+      <aside className="h-full w-full col-span-3 px-4 pt-16 pb-20">
+        <div className="bg-gray-900 rounded-xl w-full h-full">
+          <Chat roomId={router.query.sessionId} />
+        </div>
       </aside>
     </main>
   );
