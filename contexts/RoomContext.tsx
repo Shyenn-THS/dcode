@@ -22,13 +22,15 @@ export const RoomProvider: FunctionComponent<Props> = ({ children }) => {
   const [stream, setStream] = useState<MediaStream>();
   const [audioTrack, setAudioTrack] = useState<MediaStreamTrack>();
   const [videoTrack, setVideoTrack] = useState<MediaStreamTrack>();
+  const [participants, setParticipants] = useState<string[]>();
 
   useEffect(() => {
     const getUsers = ({ participants }: { participants: string[] }) => {
-      console.log(participants);
+      setParticipants(participants);
     };
 
     const removePeer = (peerId: string) => {
+      setParticipants(participants?.filter((id) => id !== peerId));
       console.log(`${peerId} left`);
     };
 
@@ -48,6 +50,7 @@ export const RoomProvider: FunctionComponent<Props> = ({ children }) => {
     return () => {
       ws.off('get-users');
       ws.off('user-disconnected');
+      ws.off('session-ended');
     };
   }, [router]);
 
@@ -78,6 +81,7 @@ export const RoomProvider: FunctionComponent<Props> = ({ children }) => {
         stream,
         audioTrack,
         videoTrack,
+        participants,
         setStream,
         setAudioTrack,
         setVideoTrack,

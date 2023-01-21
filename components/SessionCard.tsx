@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsFillCalendarDateFill } from 'react-icons/bs';
-import { SessionDetails } from '../typings';
+import { SessionDetails } from '../types/typings';
 import StatusBadge from './StatusBadge';
 
 interface ExtendedSessionDetails extends SessionDetails {
@@ -28,7 +28,7 @@ const SessionCard = ({ session }: { session: ExtendedSessionDetails }) => {
     <Link
       rel="noopener noreferrer"
       href={`/sessions/${id}`}
-      className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-900"
+      className="max-w-sm mx-auto group hover:no-underline focus:no-underline bg-gray-400 dark:bg-gray-900"
     >
       <Image
         role="presentation"

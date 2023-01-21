@@ -1,7 +1,7 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { UserDetails } from '../../../typings';
+import { UserDetails } from '../../../types/typings';
 import { v4 as uuidv4 } from 'uuid';
 import db from '../../../lib/firebase';
 

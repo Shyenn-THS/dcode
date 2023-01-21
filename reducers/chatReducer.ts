@@ -3,7 +3,6 @@ import { ADD_MESSAGE, ADD_HISTORY } from './chatActions';
 
 export type ChatState = {
   messages: IMessage[];
-  isChatOpen: boolean;
 };
 
 type ChatAction =

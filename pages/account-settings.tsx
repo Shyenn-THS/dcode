@@ -3,7 +3,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { uploadToCloudinary } from '../lib/uploadImage';
-import { UserDetails } from '../typings';
+import { UserDetails } from '../types/typings';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 

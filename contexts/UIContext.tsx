@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { createContext, useReducer, Reducer } from 'react';
-import { ModalContent } from '../typings';
+import { ModalContent } from '../types/typings';
 
 type StoreStateType = {
   darkMode: boolean;

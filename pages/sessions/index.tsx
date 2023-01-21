@@ -1,13 +1,9 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { SessionDetails } from '../../typings';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { SessionDetails } from '../../types/typings';
+import { collection, getDocs, query, updateDoc, doc } from 'firebase/firestore';
 import db from '../../lib/firebase';
-import Link from 'next/link';
-import Image from 'next/image';
-import moment from 'moment';
 import SessionCard from '../../components/SessionCard';
-import classNames from 'classnames';
 import OngoingSessionsCard from '../../components/OngoingSessionsCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -71,7 +67,7 @@ const SessionIndex = (props: Props) => {
         </div>
       </section>
 
-      <section className="container max-w-6xl p-6 py-20 mx-auto space-y-6 sm:space-y-12">
+      <section className="container max-w-6xl p-6 pb-20 mx-auto space-y-6 sm:space-y-12">
         <div className="space-y-2 text-center">
           <h2 className="text-3xl font-bold">Ended Sessions</h2>
           <p className="font-serif text-sm dark:text-gray-400">
@@ -108,11 +104,38 @@ export const getServerSideProps: GetServerSideProps = async () => {
     let endedSessions: SessionDetails[] = [];
     let ongoingSessions: SessionDetails[] = [];
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(async (document) => {
       // doc.data() is never undefined for query doc snapshots
-      const data = { ...doc.data(), id: doc.id } as ExtendedSessionDetails;
+      const data = {
+        ...document.data(),
+        id: document.id,
+      } as ExtendedSessionDetails;
+
+      const splitTime = data.startTime.split(':');
+      const hours = splitTime[0];
+      const mins = splitTime[1];
+      const sessionEndDateTime = new Date(data.startDate);
+      sessionEndDateTime.setHours(parseInt(hours) + 5);
+      sessionEndDateTime.setMinutes(parseInt(mins));
+      sessionEndDateTime.setSeconds(0);
+      sessionEndDateTime.setMilliseconds(0);
+
+      const currDateTime = new Date();
+
+      if (currDateTime > sessionEndDateTime && data.status !== 'ended') {
+        const sessionRef = doc(db, 'sessions', data.id);
+        await updateDoc(sessionRef, {
+          status: 'ended',
+        });
+
+        data.status = 'ended';
+      }
+
       switch (data.status) {
         case 'upcoming':
+          upcomingSessions.push(data);
+          break;
+        case 'delayed':
           upcomingSessions.push(data);
           break;
         case 'started':

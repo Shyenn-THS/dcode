@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UserDetails, SessionDetails, ModalContent } from '../../typings';
+import { UserDetails, SessionDetails, ModalContent } from '../../types/typings';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import db from '../../lib/firebase';
 import { GetServerSideProps } from 'next';

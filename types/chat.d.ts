@@ -1,4 +1,4 @@
-import { UserDetails } from '@/typings';
+import { UserDetails } from '@/types/typings';
 
 export interface IMessage {
   content: string;

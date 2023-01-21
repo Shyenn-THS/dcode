@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserDetails, SessionDetails } from '../../typings';
+import { UserDetails, SessionDetails } from '../../types/typings';
 import {
   collection,
   doc,
@@ -82,7 +82,7 @@ const UserPage = (props: Props) => {
         <h1 className="text-3xl font-medium py-4 text-gray-50 text-center">
           Own Sessions
         </h1>
-        <div className="dark:text-gray-100 py-4 flex items-center justify-between w-full">
+        <div className="dark:text-gray-100 grid grid-cols-3 gap-4 py-4 w-full">
           {ownSessions.map((ownSession) => {
             return <SessionCard session={ownSession} key={ownSession.id} />;
           })}
@@ -93,7 +93,7 @@ const UserPage = (props: Props) => {
         <h1 className="text-3xl font-medium py-4 text-gray-50 text-center">
           Attended Sessions
         </h1>
-        <div className="dark:text-gray-100 py-4 flex items-center justify-between w-full">
+        <div className="dark:text-gray-100 grid grid-cols-3 gap-4 py-4 w-full">
           {attendedSessions.map((attendedSession) => {
             return (
               <SessionCard session={attendedSession} key={attendedSession.id} />

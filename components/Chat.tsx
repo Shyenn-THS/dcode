@@ -1,4 +1,4 @@
-import { UserDetails } from '@/typings';
+import { UserDetails } from '@/types/typings';
 import React, { useContext, useRef } from 'react';
 import { ChatContext } from '../contexts/ChatContext';
 import classNames from 'classnames';
@@ -14,13 +14,13 @@ type Props = {
 const Chat = (props: Props) => {
   const { chat, sendMessage } = useContext(ChatContext);
   const { data: session } = useSession();
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement | null | undefined>();
   const { roomId } = props;
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = (e: HTMLFormElement) => {
     e.preventDefault();
-    sendMessage(inputRef.current.value, roomId, session?.user);
-    inputRef.current.value = '';
+    sendMessage(inputRef!.current!.value, roomId, session!.user);
+    inputRef!.current!.value = '';
   };
 
   return (

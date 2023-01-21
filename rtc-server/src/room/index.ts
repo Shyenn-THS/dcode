@@ -1,29 +1,5 @@
 import { Socket } from 'socket.io';
-
-interface IRoomParams {
-  roomId: string;
-  peerId: string;
-}
-
-interface UserDetails {
-  fname: string;
-  lname: string;
-  email: string;
-  image: string;
-  profession: string;
-  bio: string;
-  username: string;
-  website: string;
-  instagram: string;
-  linkedin: string;
-  twitter: string;
-}
-
-interface IMessage {
-  content: string;
-  author?: UserDetails;
-  timestamp: number;
-}
+import { IMessage, IRoomParams } from '../../types/room';
 
 const rooms: Record<string, string[]> = {};
 const chats: Record<string, IMessage[]> = {};
@@ -57,13 +33,12 @@ export const roomHandler = (socket: Socket) => {
     };
 
     socket.on('disconnect', () => {
-      console.log('user left the room', peerId);
+      console.log(`User ${peerId} left the room`);
       leaveRoom({ roomId, peerId });
     });
   };
 
   const addMessage = (roomId: string, message: IMessage) => {
-    console.log({ message });
     if (chats[roomId]) {
       chats[roomId].push(message);
     } else {

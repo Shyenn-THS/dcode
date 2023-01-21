@@ -5,7 +5,7 @@ import { SocialIcon } from 'react-social-icons';
 
 type Props = {};
 
-const social = ['https://shivangmishra.hashnode.dev/'];
+const social = ['https://shivangmishra.hashnode.dev'];
 const womens = [
   {
     name: 'Become Confident',

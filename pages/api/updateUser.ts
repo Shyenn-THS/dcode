@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { UserDetails } from '../../typings';
+import { UserDetails } from '../../types/typings';
 import db from '../../lib/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 

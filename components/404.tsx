@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 type Props = {};
@@ -16,13 +17,13 @@ const Page404 = (props: Props) => {
           <p className="mt-4 mb-8 dark:text-gray-400">
             But dont worry, you can find plenty of other things on our homepage.
           </p>
-          <a
+          <Link
             rel="noopener noreferrer"
-            href="#"
-            className="px-8 py-3 font-semibold rounded dark:bg-violet-400 dark:text-gray-900"
+            href="/"
+            className="px-8 py-3 font-semibold rounded dark:bg-blue-400 dark:text-gray-900"
           >
             Back to homepage
-          </a>
+          </Link>
         </div>
       </div>
     </section>

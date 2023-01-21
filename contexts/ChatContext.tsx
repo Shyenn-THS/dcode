@@ -1,27 +1,29 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, FunctionComponent, useEffect, useReducer } from 'react';
 import { IMessage } from '../types/chat';
 import { chatReducer, ChatState } from '../reducers/chatReducer';
 import { addHistoryAction, addMessageAction } from '../reducers/chatActions';
 import { ws } from '../lib/ws';
-import { UserDetails } from '@/typings';
+import { UserDetails } from '@/types/typings';
 
 interface ChatValue {
   chat: ChatState;
   sendMessage: (message: string, roomId: string, author: UserDetails) => void;
 }
 
+interface Props {
+  children: React.ReactNode;
+}
+
 export const ChatContext = createContext<ChatValue>({
   chat: {
     messages: [],
-    isChatOpen: false,
   },
   sendMessage: (message: string, roomId: string, author: UserDetails) => {},
 });
 
-export const ChatProvider: React.FC = ({ children }) => {
+export const ChatProvider: FunctionComponent<Props> = ({ children }) => {
   const [chat, chatDispatch] = useReducer(chatReducer, {
     messages: [],
-    isChatOpen: false,
   });
 
   const sendMessage = (

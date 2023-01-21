@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { SessionDetails } from '../typings';
+import { SessionDetails } from '../types/typings';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { IoIosAddCircle, IoMdClose } from 'react-icons/io';
@@ -12,8 +12,8 @@ import { uploadToCloudinary } from '../lib/uploadImage';
 type Props = {};
 
 const CreateCourse = (props: Props) => {
-  const technologyRef = useRef();
-  const categoryRef = useRef();
+  const technologyRef = useRef<HTMLInputElement | null>();
+  const categoryRef = useRef<HTMLInputElement | null>();
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -23,12 +23,12 @@ const CreateCourse = (props: Props) => {
     formState: { errors, isSubmitSuccessful },
   } = useForm<SessionDetails>();
 
-  const hiddenFileInput = useRef();
+  const hiddenFileInput = useRef<HTMLInputElement | null>();
   const [preview, setPreview] = useState<string | undefined>();
   const [image, setImage] = useState<File>();
 
   const handleClick = () => {
-    hiddenFileInput.current.click();
+    hiddenFileInput!.current!.click();
   };
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -44,23 +44,23 @@ const CreateCourse = (props: Props) => {
 
   const addTechnology = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const tech = technologyRef.current.value.trim();
+    const tech = technologyRef!.current!.value.trim();
     if (tech === '') {
       return;
     }
 
     setTechnologies([...technologies, tech]);
-    technologyRef.current.value = '';
+    technologyRef!.current!.value = '';
   };
   const addCategory = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const cat = categoryRef.current.value.trim();
+    const cat = categoryRef!.current!.value.trim();
     if (cat === '') {
       return;
     }
 
     setCategories([...categories, cat]);
-    categoryRef.current.value = '';
+    categoryRef!.current!.value = '';
   };
 
   const removeCategory = (deleteCategory: string) => {

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UserDetails, SessionDetails, ModalContent } from '../../typings';
+import { UserDetails, SessionDetails, ModalContent } from '../../types/typings';
 import {
   arrayUnion,
   deleteDoc,
@@ -317,11 +317,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     temp.setSeconds(0);
     temp.setMilliseconds(0);
 
-    // if (new Date() > temp && data.status === 'upcoming') {
-    //   await updateDoc(sessionRef, {
-    //     status: 'delayed',
-    //   });
-    // }
+    if (new Date() > temp && data.status === 'upcoming') {
+      await updateDoc(sessionRef, {
+        status: 'delayed',
+      });
+    }
 
     const userRef = doc(db, 'users', data.speaker);
     const userSnap = await getDoc(userRef);
